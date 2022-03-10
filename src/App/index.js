@@ -3,7 +3,7 @@ import React from "react";
 import { AppUI } from "./AppUI";
 
 
-const defaultTodos = [
+/* const defaultTodos = [
   {
     text: 'Cortar Cebolla',
     completed: true
@@ -16,10 +16,20 @@ const defaultTodos = [
     text: 'Llorar con la Llorona',
     completed: false
   }
-]
+] */
 function App() {
 
-  const [todos, setTodos] = React.useState(defaultTodos)
+  const localStorageTodos = localStorage.getItem('TODOS_V1');
+
+  let parsedTodos;
+  if (!localStorageTodos) {
+    localStorage.setItem('TODOS_V1', JSON.stringify([]));
+    parsedTodos = [];
+  }else {
+    parsedTodos = JSON.parse(localStorageTodos)
+  }
+ 
+  const [todos, setTodos] = React.useState(parsedTodos)
   const [searchValue, setSearchValue] = React.useState('');
 
   const completedTodos = todos.filter(todo => !!todo.completed).length; //esto filtra los ToDos que ya fueron realizados
@@ -33,15 +43,20 @@ function App() {
     searchedTodos = todos.filter(todo => {
       const todoText = todo.text.toLowerCase();
       const searchText = searchValue.toLowerCase(); //aca volvemos todo lo que escribamos en search en minuscula
-      return todoText.includes(searchText); //aca preguntamos si lo que escribimos en 
+      return todoText.includes(searchText);  
       });
-    
   }
-
+  const saveTodos = (newTodos) => {
+    const stringifiedTodos = JSON.stringify(newTodos); //vuelve como string mi array
+    localStorage.setItem('TODOS.V1', stringifiedTodos);//guarda lo anterior en en Todos v1 
+    //queremos que se vea la informacion correcta y evitar que se recargue la paginar ->
+    setTodos(newTodos);
+  }
   function completeTodo(text) {
     const todoIndex = todos.findIndex(todo => todo.text === text); //examinamos cada todo cual indice tiene exactamente el text
     const newTodos = [...todos];
     newTodos[todoIndex].completed = true; //agarra el indice correspondiente y le cambia el completed de false a true
+    saveTodos(todoIndex).completed = true;
     setTodos(newTodos);
     /*  todos[todoIndex] = {
        text : todos[todoIndex].text,
