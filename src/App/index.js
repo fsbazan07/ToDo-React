@@ -20,19 +20,21 @@ import { AppUI } from "./AppUI";
 function App() {
 
   const localStorageTodos = localStorage.getItem('TODOS_V1');
-
   let parsedTodos;
+  
   if (!localStorageTodos) {
     localStorage.setItem('TODOS_V1', JSON.stringify([]));
     parsedTodos = [];
   }else {
     parsedTodos = JSON.parse(localStorageTodos)
   }
- 
-  const [todos, setTodos] = React.useState(parsedTodos)
+  
+  const [todos, setTodos] = React.useState(parsedTodos);
   const [searchValue, setSearchValue] = React.useState('');
 
-  const completedTodos = todos.filter(todo => !!todo.completed).length; //esto filtra los ToDos que ya fueron realizados
+  const completedTodos = todos.filter(todo => !!todo.completed).length; 
+  //esto filtra los ToDos que ya fueron realizados
+  //console.log(completedTodos);
   const totalTodos = todos.length;
 
   let searchedTodos = [];
@@ -46,29 +48,32 @@ function App() {
       return todoText.includes(searchText);  
       });
   }
+
   const saveTodos = (newTodos) => {
     const stringifiedTodos = JSON.stringify(newTodos); //vuelve como string mi array
-    localStorage.setItem('TODOS.V1', stringifiedTodos);//guarda lo anterior en en Todos v1 
+    localStorage.setItem('TODOS_V1', stringifiedTodos);//guarda lo anterior en en Todos v1 
     //queremos que se vea la informacion correcta y evitar que se recargue la paginar ->
     setTodos(newTodos);
-  }
+  };
   function completeTodo(text) {
     const todoIndex = todos.findIndex(todo => todo.text === text); //examinamos cada todo cual indice tiene exactamente el text
     const newTodos = [...todos];
     newTodos[todoIndex].completed = true; //agarra el indice correspondiente y le cambia el completed de false a true
-    saveTodos(todoIndex).completed = true;
-    setTodos(newTodos);
-    /*  todos[todoIndex] = {
+    saveTodos(newTodos);
+    //setTodos(newTodos);
+/*      todos[todoIndex] = {
        text : todos[todoIndex].text,
-       completed: true,
-     } */
-  }
+       completed: true, */
+     };
+  
 
   const deleteTodo = (text) => {
     const todoIndex = todos.findIndex(todo => todo.text === text); 
     const newTodos = [...todos];
     newTodos.splice(todoIndex, 1); //aca agarra el elemento del index elegido, y elimina 1 
-    setTodos(newTodos);
+    //setTodos(newTodos);
+   saveTodos(newTodos);
+
   }
   return (
     <AppUI 
