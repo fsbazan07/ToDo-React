@@ -14,6 +14,7 @@ const {
 
 
   const [searchValue, setSearchValue] = React.useState('');
+  const [openModal, setOpenModal] = React.useState(false);
 
   const completedTodos = todos.filter(todo => !!todo.completed).length; 
   //esto filtra los ToDos que ya fueron realizados
@@ -40,6 +41,17 @@ const {
     saveTodos(newTodos);
   
      };
+
+  function addTodo(text) {
+    const newTodos = [...todos];
+    newTodos.push(
+      {
+        completed: false,
+        text,
+      }
+    )
+    saveTodos(newTodos);
+      };   
   
 
   const deleteTodo = (text) => {
@@ -58,7 +70,10 @@ const {
           setSearchValue,
           searchedTodos,
           completeTodo,
+          addTodo,
           deleteTodo,
+          openModal,
+          setOpenModal,
       }}>
         {props.children}
       </TodoContext.Provider>
