@@ -10,9 +10,14 @@ const {
     addTodo,
 } = React.useContext(TodoContext);
 
-const onCancel = () => {
-    
-    //
+/* const handleCloseModal = (props) => {
+    props.setState({ isOpen: false });
+} */
+
+const onCancel = (props) => {
+   
+    props.setOpenModal(false);
+
 }
 const onChange = (event) => {
     setNewTodoValue(event.target.value)
@@ -24,20 +29,22 @@ const onSubmit = (event) => {
 
     return (
     <form onSubmit={onSubmit}>
-    <label>...</label>
+    <label>Escribe aqui tu proxima tarea</label>
     <textarea 
     value={newTodoValue}
     onChange={onChange}
     placeholder='Cortar la cebolla para el almuerzo'
     />
-    <div>
+    <div className='TodoForm-buttonContainer'>
     <button
+    className='TodoForm-button TodoForm-button-cancel'
     type='button'
     onClick={onCancel}
     >
         Cancelar
         </button>
     <button
+    className='TodoForm-button TodoForm-button-add'
     type='submit'
         >
         Agregar
